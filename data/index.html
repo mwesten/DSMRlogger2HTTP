@@ -34,16 +34,16 @@
     <div class="container-fluid">
       <h1>ESP-DSMR Slimme Meter Logger</h1>
       <ul class="nav nav-tabs" id="tab">
-        <li>               <a href="#tab_Actual"     data-toggle="tab">Actueel Verbruik</a></li>
+        <li class="active"><a href="#tab_Actual"     data-toggle="tab">Actueel Verbruik</a></li>
+        <li>               <a href="#tab_Hour"       data-toggle="tab">Afgelopen 24 Uur</a></li>
         <li>               <a href="#tab_Week"       data-toggle="tab">Afgelopen Week</a></li>
-        <li class="active"><a href="#tab_Hour"       data-toggle="tab">Afgelopen 24 Uur</a></li>
         <li>               <a href="#tab_Month"      data-toggle="tab">Afgelopen 24 Maanden</a></li>
         <li>               <a href="#tab_DeviceInfo" data-toggle="tab">Device Info</a></li>
       </ul>
       <div class="tab-content">
         
       <!-- START OF TAB id="tab_Actual" -->
-      <div class="tab-pane fade" id="tab_Actual"> 
+      <div class="tab-pane fade in active" id="tab_Actual"> 
           <h2>ESP-DSMR Actueel Verbruik</h2>
           <div class="row">
           	<div class="col-md-2 col-sm-4">	<!-- left column -->
@@ -174,6 +174,24 @@
           </div> <!-- end table row -->
         </div>
         <!-- END OFF id="tab_Actual" -->
+
+        <!-- START OF TAB id="tab_Hour" -->
+        <div class="tab-pane fade  col-md-6 in" id="tab_Hour">        
+          <h2>Verbruik Afgelopen 24 Uur</h2>
+          <br>
+          <table id="table_Hours" data-toggle="table" data-show-colunns="true" style="width: 75%; background-color: #b2d4ff;">
+            <thead>
+              <tr>
+                <th data-field="Hour" data-align="center" data-sortable="false">Uur (van-tot)</th>
+                <th data-field="Energy_Delivered" data-align="right" data-sortable="false">Energie Verbruik (Wh)</th>
+                <th data-field="Energy_Returned" data-align="right" data-sortable="false">Energie Terug Levering (Wh)</th>
+                <th data-field="Gas_Delivered" data-align="right" data-sortable="false">Gas Verbruik (m3)</th>
+              </tr>
+            </thead>
+          </table>        
+        </div>  
+        <!-- END OF TAB id="tab_Hour" -->       
+
         
       <!-- START OF TAB id="tab_Week" -->
       <div class="tab-pane fade col-md-6" id="tab_Week">
@@ -192,25 +210,8 @@
         </div>
         <!-- END OF TAB id="tab_Week" -->
 
-        <!-- START OF TAB id="tab_Hour" -->
-        <div class="tab-pane fade  col-md-6 in active" id="tab_Hour">        
-          <h2>Verbruik Afgelopen 24 Uur</h2>
-          <br>
-          <table id="table_Hours" data-toggle="table" data-show-colunns="true" style="width: 75%; background-color: #b2d4ff;">
-            <thead>
-              <tr>
-                <th data-field="Hour" data-align="center" data-sortable="false">Uur (van-tot)</th>
-                <th data-field="Energy_Delivered" data-align="right" data-sortable="false">Energie Verbruik (Wh)</th>
-                <th data-field="Energy_Returned" data-align="right" data-sortable="false">Energie Terug Levering (Wh)</th>
-                <th data-field="Gas_Delivered" data-align="right" data-sortable="false">Gas Verbruik (m3)</th>
-              </tr>
-            </thead>
-          </table>        
-        </div>	
-        <!-- END OF TAB id="tab_Hour" -->       
-
         <!-- START OF TAB id="tab_Month" -->
-        <div class="tab-pane fade in active" id="tab_Month">        
+        <div class="tab-pane fade in" id="tab_Month">        
           <h2>Verbruik Afgelopen 24 Maanden</h2>
           <br>
           <table id="table_Months" data-toggle="table" data-show-colunns="true" style="width: 75%; background-color: #b2d4ff;">
@@ -263,7 +264,7 @@
             </ul>
             <ul class="nav nav-pills">
             	<li class="active"><a style="width:410px" href="#">
-              	  <div class="span badge pull-right" id="D_equipmentId">??</div>Eguipment ID</a>
+              	  <div class="span badge pull-right" id="D_equipmentId">??</div>Equipment ID</a>
               </li>
             </ul>
             <ul class="nav nav-pills">
@@ -337,7 +338,7 @@
             </ul>
             <ul class="nav nav-pills">
               <li class="active"><a style="width:300px" href="#">
-                  <div class="span badge pull-right" id="D_TelegramErrors">??</div>Telegrams Errors</a>
+                  <div class="span badge pull-right" id="D_TelegramErrors">??</div>Telegram Errors</a>
               </li>
             </ul>
             <br>
@@ -409,9 +410,9 @@
       <!-- END OFF id="tab_DeviceInfo" -->
         
       </div> <!-- END OFF class="tab-content" -->
-      <!-- this button will be hidden by $(document).ready() but is absolutly -->
-      <!-- necessary to get #tab_Actual refressed every x seconds!! Leave it!  -->
-      <a class="next btn btn-default" id="hiddenButton" href="#">Refress</a>
+      <!-- this button will be hidden by $(document).ready() but is absolutely -->
+      <!-- necessary to get #tab_Actual refreshed every x seconds!! Leave it!  -->
+      <a class="next btn btn-default" id="hiddenButton" href="#">Refresh</a>
       </div> <!-- END OFF class="container-fluid" -->
 
     <script src="/index.js"></script>

@@ -59,6 +59,9 @@ void sendDataDeviceInfo() {
 #ifdef ESP8266_ESP12
     jsonString += String("\"ESP8266_ESP12\"");
 #endif
+#ifdef ARDUINO_ESP8266_WEMOS_D1MINI
+    jsonString += String("\"ESP8266_WEMOS_D1MINI\"");
+#endif
   jsonString += ",\"SSID\":\""              + String( WiFi.SSID() ) + "\"";
 //jsonString += ",\"PskKey\":\""            + String( WiFi.psk() ) + "\"";    // uncomment if you want to see this
   jsonString += ",\"IpAddress\":\""         +  WiFi.localIP().toString()  + "\"";
@@ -111,6 +114,7 @@ void sendDataActual() {
   jsonString += ",\"Power_Returned_l2\":\"" + String(PowerReturned_l2) + "\"";
   jsonString += ",\"Power_Delivered_l3\":\"" + String(PowerDelivered_l3) + "\"";
   jsonString += ",\"Power_Returned_l3\":\"" + String(PowerReturned_l3) + "\"";
+  jsonString += ",\"Electricity_Tariff\":\"" + String(ElectricityTariff) + "\"";
   jsonString += "}";
   server.send(200, "application/json", jsonString);
   TelnetStream.println("sendDataActual(): send JSON string\r\n");

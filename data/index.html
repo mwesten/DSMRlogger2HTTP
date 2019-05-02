@@ -34,8 +34,8 @@
     <div class="container-fluid">
       <h1>ESP-DSMR Slimme Meter Logger</h1>
       <ul class="nav nav-tabs" id="tab">
-        <li class="active"><a href="#tab_Actual"     data-toggle="tab">Actueel Verbruik</a></li>
-        <li>               <a href="#tab_Hour"       data-toggle="tab">Afgelopen 24 Uur</a></li>
+        <li>               <a href="#tab_Actual"     data-toggle="tab">Actueel Verbruik</a></li>
+        <li class="active"><a href="#tab_Hour"       data-toggle="tab">Afgelopen 24 Uur</a></li>
         <li>               <a href="#tab_Week"       data-toggle="tab">Afgelopen Week</a></li>
         <li>               <a href="#tab_Month"      data-toggle="tab">Afgelopen 24 Maanden</a></li>
         <li>               <a href="#tab_DeviceInfo" data-toggle="tab">Device Info</a></li>
@@ -43,10 +43,10 @@
       <div class="tab-content">
         
       <!-- START OF TAB id="tab_Actual" -->
-      <div class="tab-pane fade in active" id="tab_Actual"> 
+      <div class="tab-pane fade" id="tab_Actual"> 
           <h2>ESP-DSMR Actueel Verbruik</h2>
           <div class="row">
-          	<div class="col-md-2 col-sm-4">	<!-- left column -->
+          	<div class="col-md-3 col-sm-4">	<!-- left column -->
           		<ul class="nav nav-pills">
           			<li class="active"><a style="width:250px" href="#">
           				<div class="span badge pull-right" id="DSMRenergyDelivered">??</div>Energie Verbruik (kWh)</a>
@@ -69,7 +69,7 @@
                 </li>
               </ul>
             </div>													<!-- end left column -->
-            <div class="col-md-2 col-sm-4">	<!-- start middle column -->
+            <div class="col-md-3 col-sm-4">	<!-- start middle column -->
             	<ul class="nav nav-pills">
             		<li class="active"><a style="width:250px" href="#">
                 	<div class="span badge pull-right" id="DSMRenergyDeliveredTariff1">??</div>Energie Verbruik T1 (kWh)</a>
@@ -107,7 +107,7 @@
                 </li>
               </ul>
             </div>													<!-- end middle column -->
-          	<div class="col-md-2 col-sm-4">	<!-- right column -->
+          	<div class="col-md-3 col-sm-4">	<!-- right column -->
               <ul class="nav nav-pills">
             		<li class="active"><a style="width:250px" href="#">
                 	<div class="span badge pull-right" id="DSMRpowerDelivered_l1">??</div>Verbruik L1 (Watt)</a>
@@ -176,7 +176,7 @@
         <!-- END OFF id="tab_Actual" -->
 
         <!-- START OF TAB id="tab_Hour" -->
-        <div class="tab-pane fade  col-md-6 in" id="tab_Hour">        
+        <div class="tab-pane fade  col-md-6 in active" id="tab_Hour">        
           <h2>Verbruik Afgelopen 24 Uur</h2>
           <br>
           <table id="table_Hours" data-toggle="table" data-show-colunns="true" style="width: 75%; background-color: #b2d4ff;">
@@ -211,7 +211,7 @@
         <!-- END OF TAB id="tab_Week" -->
 
         <!-- START OF TAB id="tab_Month" -->
-        <div class="tab-pane fade in" id="tab_Month">        
+        <div class="tab-pane fade" id="tab_Month">        
           <h2>Verbruik Afgelopen 24 Maanden</h2>
           <br>
           <table id="table_Months" data-toggle="table" data-show-colunns="true" style="width: 75%; background-color: #b2d4ff;">

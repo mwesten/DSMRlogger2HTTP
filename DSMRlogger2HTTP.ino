@@ -2,9 +2,12 @@
 ***************************************************************************  
 **  Program  : DSMRlogger2HTTP
 */
-#define _FW_VERSION "v0.7.6 (Oct 27 2018)"
+#define _FW_VERSION "v0.8.0 (May 2 2019)"
 /*
 **  Copyright (c) 2018 Willem Aandewiel
+** 
+**  2 may 2019 : Added option to send the data to the API of DSMR-Reader https://github.com/dennissiemensma/dsmr-reader
+** 24 feb 2019 : Added functionality to run this scipt on a Wemos D1 board with the addon board from http://www.esp8266thingies.nl/wp/
 **
 **  TERMS OF USE: MIT License. See bottom of file.                                                            
 ***************************************************************************      
@@ -26,6 +29,38 @@
     - Erase Flash: "Only Sketch"
     - Port: "ESP01-DSMR at <-- IP address -->"
 */
+/*
+  Arduino-IDE settings for WEMOS D1 Mini P1 board:
+
+    - Board: "Generic ESP8266 Module"
+    - Flash mode: "DOUT"
+    - Flash size: "4M (3M SPIFFS)"
+    - Debug port: "Disabled"
+    - Debug Level: "None"
+    - IwIP Variant: "v2 Lower Memory"
+    - Reset Method: "nodemcu"   // but will depend on the programmer!
+    - Crystal Frequency: "80 MHz" 
+    - VTables: "Flash"
+    - Flash Frequency: "40MHz"
+    - CPU Frequency: "80 MHz"
+    - Buildin Led: "1"  // GPIO01 - Pin 2
+    - Upload Speed: "115200"
+    - Erase Flash: "Only Sketch"
+    - Port: "ESP01-DSMR at <-- IP address -->"
+*/
+
+/**** STATIC CONFIG (FOR NOW) ****/
+// If the next line is NOT commented out, tries to POST the P1-Telegram to the specified DSMR Reader instance
+#define DSMRR_ENABLED
+
+// The IP address of the DSMR-Reader instance (Full URL, so with "http://" or "https://" and port; ie: "http://10.0.0.1:1234" )
+#define DSMRR_HOST      "http://192.168.178.50:1111"
+// The API key for the DSMR-Reader
+#define DSMRR_API_KEY   "61PJXWSGFTJGM4YSNMAB5GFY71RA1CGISI6SLTST6P52IPLZ66IPRCC022PV9K6W"
+
+
+// The URL to post the data to (must not be changed!) (Start with a slash!)
+#define DSMRR_API_URL   "/api/v1/datalogger/dsmrreading"
 
 /******************** change this for testing only **********************************/
 // #define HAS_NO_METER       // define if No Meter is attached
@@ -55,6 +90,7 @@
 //  https://github.com/matthijskooijman/arduino-dsmr
 #include <dsmr.h>               // Version 0.1.0
 
+
 #ifdef ARDUINO_ESP8266_NODEMCU
   #define VCC_ENABLE   14       // D3 = GPIO0, D5 = GPIO14, D6 = GPIO12
   #ifdef HAS_NO_METER
@@ -63,6 +99,14 @@
     #define HOSTNAME     "NODEMCU-DSMR"
   #endif
   //#define VCC_ENABLE    0     // <-- define valid GPIO-pin for DTR
+#endif
+#ifdef ARDUINO_ESP8266_WEMOS_D1MINI
+  #ifdef HAS_NO_METER
+    #define HOSTNAME     "TEST-DSMR"
+  #else
+    #define HOSTNAME     "WEMOS-DSMR"
+  #endif
+  //#define VCC_ENABLE    0     // ESP01 does not have a free GPIO-pin
 #endif
 #ifdef ARDUINO_ESP8266_GENERIC
   #ifdef HAS_NO_METER
@@ -718,6 +762,36 @@ void setup() {
 
 
 //===========================================================================================
+void dsmrreaderPost(String telegram) {
+//===========================================================================================
+// Post the P1 telegram raw data to the DSMR Reader instance.
+// #define DSMRR_HOST      "http://192.168.178.50"
+// #define DSMRR_PORT      "1111"
+// #define DSMRR_API_KEY   "61PJXWSGFTJGM4YSNMAB5GFY71RA1CGISI6SLTST6P52IPLZ66IPRCC022PV9K6W"
+// #define DSMRR_API_URL   "/api/v1/datalogger/dsmrreading"
+
+  HTTPClient http;    //Declare object of class HTTPClient
+  //Post Data
+  postData = "telegram=" + telegram ;
+  
+  http.begin(DSMRR_HOST + DSMRR_API_URL);                               // Specify request destination
+  http.addHeader("X-AUTHKEY", DSMRR_API_KEY);                           // Specify the API key
+  http.addHeader("Content-Type", "application/x-www-form-urlencoded");  //Specify content-type header
+
+  int httpCode = http.POST(postData);   //Send the request
+  String payload = http.getString();    //Get the response payload
+
+  Serial.println(httpCode);   //Print HTTP return code
+  Serial.println(payload);    //Print request response payload
+
+  http.end();  //Close connection
+
+ 
+} // dsmrreaderPost()
+
+
+
+//===========================================================================================
 void loop () {
 //===========================================================================================
   ArduinoOTA.handle();
@@ -831,6 +905,15 @@ void loop () {
 
         if (reader.parse(&DSMRdata, &DSMRerror)) {  // Parse succesful, print result
           digitalWrite(BUILTIN_LED, LED_OFF);
+          
+          #ifdef DSMRR_ENABLED
+            // Max: Call external API with RAW Telegram data
+            Serial.printf("[DSMR-Reader] --- START ---\n");
+            Serial.printf("[DSMR-Reader] is enabled\n");
+            dsmrreaderPost(reader.raw());
+            Serial.printf("[DSMR-Reader] --- END ---\n");
+          #endif
+          
           processData(DSMRdata);
           if (Verbose) {
             DSMRdata.applyEach(showValues());
